@@ -2,7 +2,12 @@ import os
 from scipy import misc
 from scipy import ndimage
 import numpy as np
+import matplotlib.pyplot as plt
 
+
+def reject_outliers(data, m=2):
+    data[abs(data - np.mean(data)) < m * np.std(data)] = 0
+    return data
 
 def differentialSquash(image_source):
     """
@@ -19,25 +24,17 @@ def differentialSquash(image_source):
             I = misc.imread(os.path.join(image_source,file),mode='I')
             images.append(I)
     old = images.pop(0)
-    old_max = np.max(old)
     differentialArray = np.zeros(old.shape, dtype='uint16')
     images = images[100:]
 
     for image in images:
-        difference = np.subtract(image,old)
-
-        differentialArray = differentialArray + difference
+        difference = np.subtract(image, old)
+        differentialArray = (differentialArray + difference)
         old = image
-    print(differentialArray)
-    diffMax = np.max(differentialArray)
-    factor = 20         # The factor should be dynamically chosen
-
-    differentialArray[differentialArray<diffMax/factor] = 0
-    differentialArray[differentialArray>diffMax/factor] = 1000
-
+    differentialArray = np.where(differentialArray<np.average(differentialArray),0,255)
     misc.imshow(differentialArray)
 
 
 # You can test the above function by uncommenting and changing the path for now.
-# image_source = '../TestImages/Pos0'
-# differentialSquash(image_source)
+image_source = '../TestImages/Pos0'
+differentialSquash(image_source)
