@@ -34,7 +34,10 @@ def differentialSquash(image_source):
     differentialArray = np.where(differentialArray<np.average(differentialArray),0,255)
     misc.imshow(differentialArray)
 
-
+def filter():
+    image = misc.imread(r'C:\Users\ksg13004\Desktop\BME-Senior-Design\Data\sample\Converted\img_000000230_Default_000.jpg')
+    plt.imshow(image)
 # You can test the above function by uncommenting and changing the path for now.
 image_source = '../TestImages/Pos0'
-differentialSquash(image_source)
+#differentialSquash(image_source)
+filter()
